@@ -62,6 +62,7 @@ router.post('/addtocart', fetchuser, [
             totalPrice += item.quantity * product.price;
         }
 
+
         // Set the total price in the cart
         cart.totalPrice = totalPrice;
 
@@ -96,11 +97,20 @@ router.delete('/removeitem/:id', fetchuser, async (req, res) => {
         // Remove the item from the cart
         cart.items.splice(itemIndex, 1);
 
-        // Calculate the total price after removing the item
+        /* Calculate the total price after removing the item
         let newTotalPrice = 0;
         for (const item of cart.items) {
             newTotalPrice += item.product.price * item.quantity;
         }
+        cart.totalPrice = newTotalPrice;
+
+        (or we can use Reduce function to calculate the Final total value of cart)
+
+        */
+        const newTotalPrice = cart.items.reduce((total, item) => {
+            return total + item.product.price * item.quantity;
+        }, 0);
+
         cart.totalPrice = newTotalPrice;
 
         // Save the updated cart
