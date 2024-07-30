@@ -1,8 +1,44 @@
-const express = require('express');
+const express = require ('express');
 const router = express.Router();
 var fetchuser = require('../middleware/fetchuser')
 const Product = require('../models/Product');
 const { body, validationResult } = require('express-validator');
+
+//Fetching the Product by ID: GET "/api/product/viewproduct/:id"
+try {
+    router.get('/viewproduct/:id', async (req, res) => {
+        const product = await Product.find({_id:req.params.id});
+        res.json(product)
+    })
+} catch (error) {
+
+    console.error(error.message)
+    res.status(500).send("Internal Server Error");
+}
+
+//Fetching the Products: GET "/api/product/viewproducts" Login is not required
+try {
+    router.get('/viewproducts', async (req, res) => {
+        const products = await Product.find({});
+        res.json(products)
+    })
+} catch (error) {
+
+    console.error(error.message)
+    res.status(500).send("Internal Server Error");
+}
+
+//Fetching the Products: GET "/api/product/categoryview" Login is not required
+try {
+    router.get('/categoryview/:category',async (req, res) => {
+        const products = await Product.find({category:req.params.category});
+        res.json(products)
+    })
+} catch (error) {
+
+    console.error(error.message)
+    res.status(500).send("Internal Server Error");
+}
 
 
 //Fetching the Products: GET "/api/product/fetchproduct" Login is required

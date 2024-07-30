@@ -7,7 +7,7 @@ const Cart = require('../models/Cart');
 
 
 //1. Checkout and create an order history entry using POST "/api/order/checkout". Login is required.
-router.post('/checkout', fetchuser, async (req, res) => {
+router.delete('/checkout', fetchuser, async (req, res) => {
     try {
         // Find the user's cart
         const cart = await Cart.findOne({ user: req.user.id }).populate('items.product');
@@ -21,9 +21,9 @@ router.post('/checkout', fetchuser, async (req, res) => {
 
         // Create a new order history entry
         const orderHistory = new OrderHistory({
-            userId: req.user.id,
+            user: req.user.id,
             items: cart.items.map(item => ({
-                productId: item.product._id,
+                product: item.product._id,
                 quantity: item.quantity
             })),
             totalAmount:totalAmount, // Total price of all items in the cart

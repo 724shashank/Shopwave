@@ -3,14 +3,14 @@ const { Schema } = mongoose;
 
 // Define the OrderHistory schema
 const OrderHistorySchema = new Schema({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     items: [
         {
-            productId: {
+            product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
                 required: true
