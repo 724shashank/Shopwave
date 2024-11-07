@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongoURI = 'mongodb://0.0.0.0:27017/Shopwave';
+const mongoURI = process.env.MONGODB_URL;
 
 const connectToMongo = async () => {
     try {

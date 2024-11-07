@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        default: 'default.jpg'
+        default: '/icons/Not_Found.png'
     },
     
     supplier: {

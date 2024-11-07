@@ -19,7 +19,7 @@ router.post('/addtocart/:productId/:quantity', fetchuser, async (req, res) => {
         }
 
         let cart = await Cart.findOne({ user: req.user.id });
-        
+
         // Initialize cart if not found
         if (!cart) {
             cart = new Cart({ user: req.user.id, items: [], totalPrice: 0 });
@@ -40,6 +40,8 @@ router.post('/addtocart/:productId/:quantity', fetchuser, async (req, res) => {
         const existingCartItem = cart.items.find(cartItem => cartItem.product.toString() === productId);
         if (existingCartItem) {
             existingCartItem.quantity = parsedQuantity;
+
+            // Remove the item if quantity is zero or less
             if (existingCartItem.quantity <= 0) {
                 cart.items = cart.items.filter(cartItem => cartItem.product.toString() !== productId);
             }
@@ -59,12 +61,20 @@ router.post('/addtocart/:productId/:quantity', fetchuser, async (req, res) => {
 
         cart.totalPrice = totalPrice.toFixed(2);
         const updatedCart = await cart.save();
-        res.json(updatedCart);
+
+        // Send back the updated cart and confirmation message
+        res.json({
+            success: true,
+            productId,
+            quantity: parsedQuantity
+           
+        });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 // 2. Removing the Items fromm the cart using DELETE "/api/cart/removeitem/:id". Login is required.
 
@@ -110,6 +120,21 @@ router.delete('/removeitem/:productId', fetchuser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+// 3. Fetching cart details using GET "/api/cart/cartDetails". Login is required.
+
+router.get('/cartDetails', fetchuser, async (req, res) => {
+    try {
+        const cartDetails = await Cart.findOne({ user: req.user.id });
+        if (!cartDetails) {
+            return res.status(404).json({ error: "Cart not found" });
+        }
+        res.json(cartDetails);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 
 module.exports = router;
 
