@@ -1,6 +1,5 @@
 require('dotenv').config({ path: '.env.local' });
 
-
 const connectToMongo = require("./db");
 const express = require("express");
 const cors = require("cors");
@@ -33,6 +32,11 @@ app.use("/api/payment", require("./routes/payment")); // Payment routes
 
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname)));
+
+// Default route
+app.get('/', (req, res) => {
+    res.send('Welcome to Shopwave backend!');
+});
 
 // Start the server
 app.listen(port, () => {
