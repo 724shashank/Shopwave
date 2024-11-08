@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Test Route
 app.get('/api/test', (req, res) => {
-    console.log('Test route accessed');
     res.send("Test route is working!");
 });
 
