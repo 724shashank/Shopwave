@@ -44,6 +44,7 @@ app.get('/api/test', (req, res) => {
   res.send("Test route is working!");
 });
 
+
 // Serve static files from 'Upload/Products'
 app.use(
   "/Upload/Products",
