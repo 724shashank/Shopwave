@@ -12,11 +12,27 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // CORS configuration
+const allowedOrigins = ['http://localhost:3001', 'https://your-production-frontend-url.com'];
 app.use(cors({
-  origin: '*', // Allow all origins temporarily
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
 }));
+
+// Content Security Policy headers
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; img-src 'self' blob: data:; script-src 'self'; style-src 'self' 'unsafe-inline'; trusted-types default;"
+  );
+  next();
+});
 
 // Middleware
 app.use(express.json());
@@ -25,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Test Route
 app.get('/api/test', (req, res) => {
-    res.send("Test route is working!");
+  res.send("Test route is working!");
 });
 
 // Serve static files from 'Upload/Products'
@@ -47,7 +63,7 @@ app.use(express.static(path.join(__dirname)));
 
 // Default route
 app.get('/', (req, res) => {
-    res.send('Welcome to Shopwave backend!');
+  res.send('Welcome to Shopwave backend!');
 });
 
 // Start the server
