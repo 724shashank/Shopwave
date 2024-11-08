@@ -9,13 +9,14 @@ const bodyParser = require("body-parser");
 connectToMongo();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT|| 8080;
 
 app.use(cors({
-  origin: 'https://your-frontend-url.com', // replace with your frontend URL
+  origin: '*', // Allow all origins temporarily
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
 }));
+
 
 app.use(express.json());
 app.use(bodyParser.json());
