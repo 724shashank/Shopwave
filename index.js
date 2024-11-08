@@ -9,18 +9,24 @@ const bodyParser = require("body-parser");
 connectToMongo();
 
 const app = express();
-const port = process.env.PORT|| 8080;
+const port = process.env.PORT || 5000;
 
+// CORS configuration
 app.use(cors({
   origin: '*', // Allow all origins temporarily
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
 }));
 
-
+// Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Test Route
+app.get('/api/test', (req, res) => {
+    res.send("Test route is working!");
+});
 
 // Serve static files from 'Upload/Products'
 app.use(
@@ -46,5 +52,5 @@ app.get('/', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Shopwave server listening at http://localhost:${port}`);
+  console.log(`Shopwave server listening at ${port}`);
 });
