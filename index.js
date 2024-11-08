@@ -11,7 +11,12 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://your-frontend-url.com', // replace with your frontend URL
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
