@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware to handle CORS for all routes, including preflight requests
 app.use((req, res, next) => {
-  const allowedOrigins = ['http://localhost:3000', 'https://your-production-frontend-url.com'];
+  const allowedOrigins = [process.env.LOCALHOST,process.env.FRONTEND];
   const origin = req.headers.origin;
   
   if (allowedOrigins.includes(origin)) {
