@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000; // Default port set to 5000 if not specif
 // CORS configuration
 app.use(
   cors({
-    origin: "https://shopwave-gules.vercel.app", // Corrected to match the frontend origin (no trailing slash)
+    origin: process.env.FRONTEND,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow cookies and authorization headers to be sent
   })
