@@ -12,12 +12,15 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT || 5000; // Default port set to 5000 if not specified
 
+// CORS configuration
 app.use(
   cors({
-    origin:"https://shopwave-gules.vercel.app/",
-    methods:["GET","POST","PUT","DELETE",],
+    origin: "https://shopwave-gules.vercel.app", // Corrected to match the frontend origin (no trailing slash)
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // Allow cookies and authorization headers to be sent
   })
 );
+
 // Middleware for JSON and URL-encoded data
 app.use(express.json());
 app.use(bodyParser.json());
