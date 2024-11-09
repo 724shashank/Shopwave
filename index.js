@@ -2,6 +2,7 @@ require('dotenv').config({ path: '.env.local' });
 
 const connectToMongo = require("./db");
 const express = require("express");
+const cors = require("cors"); // Import cors package
 const path = require("path");
 const bodyParser = require("body-parser");
 
@@ -11,8 +12,24 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT || 5000; // Default port set to 5000 if not specified
 
-// Disable CORS - simply don't use the cors middleware
-// CORS is now completely disabled
+// CORS configuration
+const allowedOrigins = [
+  process.env.LOCALHOST, // Allow localhost for development
+  process.env.FRONTEND,  // Allow frontend production URL (e.g., Vercel URL)
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests from the specified origins or if no origin is present (for server-side requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Reject request if the origin is not allowed
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE', // Allow only specific HTTP methods
+  credentials: true, // Allow cookies and authorization headers to be sent
+}));
 
 // Middleware for JSON and URL-encoded data
 app.use(express.json());
