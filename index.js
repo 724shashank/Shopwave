@@ -2,54 +2,41 @@ require('dotenv').config({ path: '.env.local' });
 
 const connectToMongo = require("./db");
 const express = require("express");
-const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 
+// Connect to MongoDB
 connectToMongo();
 
 const app = express();
-const port = process.env.PORT || 5000; // Set default port to 5000 if not provided in .env
+const port = process.env.PORT || 5000; // Default port set to 5000 if not specified
 
-// CORS configuration
-const allowedOrigins = [process.env.LOCALHOST, process.env.FRONTEND].filter(Boolean);
+// Disable CORS - simply don't use the cors middleware
+// CORS is now completely disabled
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests from specified origins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true,
-}));
-
-// Middleware
+// Middleware for JSON and URL-encoded data
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files from 'Upload/Products'
+// Static file serving for product uploads
 app.use(
   "/Upload/Products",
   express.static(path.join(__dirname, "Upload", "Products"))
 );
 
-// Available Routes
+// Define API Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/product", require("./routes/product"));
 app.use("/api/cart", require("./routes/cart"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/searchProducts", require("./routes/searchBar"));
-app.use("/api/payment", require("./routes/payment")); // Payment routes
+app.use("/api/payment", require("./routes/payment"));
 
-// Serve static files from the root directory (if needed)
+// Serve static files from the root directory (optional)
 app.use(express.static(path.join(__dirname)));
 
-// Default route
+// Default route for server check
 app.get('/', (req, res) => {
   res.send('Welcome to Shopwave backend!');
 });
