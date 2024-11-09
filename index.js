@@ -15,6 +15,7 @@ const port = process.env.PORT || 5000; // Default port set to 5000 if not specif
 app.use(
   cors({
     origin:"https://shopwave-gules.vercel.app/",
+    methods:["GET","POST","PUT","DELETE",],
   })
 )
 // Middleware for JSON and URL-encoded data
