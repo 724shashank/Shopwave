@@ -12,25 +12,11 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT || 5000; // Default port set to 5000 if not specified
 
-// CORS configuration
-const allowedOrigins = [
-  process.env.LOCALHOST, // Allow localhost for development
-  process.env.FRONTEND,  // Allow frontend production URL (e.g., Vercel URL)
-].filter(Boolean);
-
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests from the specified origins or if no origin is present (for server-side requests)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow request
-    } else {
-      callback(new Error('Not allowed by CORS')); // Reject request if the origin is not allowed
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE', // Allow only specific HTTP methods
-  credentials: true, // Allow cookies and authorization headers to be sent
-}));
-
+app.use(
+  cors({
+    origin:"https://shopwave-gules.vercel.app/",
+  })
+)
 // Middleware for JSON and URL-encoded data
 app.use(express.json());
 app.use(bodyParser.json());
