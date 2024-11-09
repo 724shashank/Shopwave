@@ -10,21 +10,27 @@ connectToMongo();
 
 const app = express();
 const port = process.env.PORT || 5000;
-// CORS configuration
-const allowedOrigins = [process.env.LOCALHOST, process.env.FRONTEND].filter(Boolean);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests from specified origins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true,
-}));
+// Middleware to handle CORS for all routes, including preflight requests
+app.use((req, res, next) => {
+  const allowedOrigins = ['http://localhost:3000', 'https://your-production-frontend-url.com'];
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next();
+});
 
 // Middleware
 app.use(express.json());
