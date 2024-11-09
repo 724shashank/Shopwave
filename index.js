@@ -17,7 +17,7 @@ app.use(
     origin:"https://shopwave-gules.vercel.app/",
     methods:["GET","POST","PUT","DELETE",],
   })
-)
+);
 // Middleware for JSON and URL-encoded data
 app.use(express.json());
 app.use(bodyParser.json());
